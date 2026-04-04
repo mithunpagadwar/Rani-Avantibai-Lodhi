@@ -19,6 +19,9 @@ if (!firebaseConfig.projectId) {
   console.error('Firebase configuration is incomplete. Please check environment variables or firebase-applet-config.json');
 }
 
+// Debug log for production (without exposing the full key)
+console.log('Firebase API Key status:', firebaseConfig.apiKey ? 'Found' : 'Missing');
+
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
