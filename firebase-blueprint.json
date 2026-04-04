@@ -1,0 +1,180 @@
+{
+  "entities": {
+    "Slider": {
+      "title": "Slider",
+      "description": "Hero section sliders",
+      "type": "object",
+      "properties": {
+        "imageUrl": { "type": "string", "description": "URL of the slider image" },
+        "title": { "type": "string", "description": "Title of the slide" },
+        "description": { "type": "string", "description": "Short description" },
+        "order": { "type": "number", "description": "Display order" }
+      },
+      "required": ["imageUrl", "title"]
+    },
+    "Program": {
+      "title": "Program",
+      "description": "Trust activities and events",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "date": { "type": "string", "format": "date" }
+      },
+      "required": ["title", "description"]
+    },
+    "GalleryItem": {
+      "title": "GalleryItem",
+      "description": "Photos and videos",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["photo", "video"] },
+        "url": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date" }
+      },
+      "required": ["type", "url"]
+    },
+    "Meeting": {
+      "title": "Meeting",
+      "description": "Meeting records and documents",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "pdfUrl": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["title", "date"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Blog posts and articles",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["title", "content", "author", "date"]
+    },
+    "Contact": {
+      "title": "Contact",
+      "description": "Contact form submissions",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "Member": {
+      "title": "Member",
+      "description": "Trust committee members",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "designation": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "address": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["name", "designation", "photoUrl"]
+    },
+    "Notice": {
+      "title": "Notice",
+      "description": "Marquee notices",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "General site settings",
+      "type": "object",
+      "properties": {
+        "siteName": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "address": { "type": "string" },
+        "footerText": { "type": "string" }
+      },
+      "required": ["siteName", "contactEmail", "contactPhone"]
+    },
+    "Certificate": {
+      "title": "Certificate",
+      "description": "Important certificates",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "url": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "url"]
+    },
+    "QuickLink": {
+      "title": "QuickLink",
+      "description": "Quick links for footer and home",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "url"]
+    },
+    "DonationInfo": {
+      "title": "DonationInfo",
+      "description": "Donation details",
+      "type": "object",
+      "properties": {
+        "upiId": { "type": "string" },
+        "qrScannerUrl": { "type": "string" },
+        "bankName": { "type": "string" },
+        "accountNumber": { "type": "string" },
+        "ifscCode": { "type": "string" },
+        "accountHolderName": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["upiId"]
+    },
+    "JoinUsInfo": {
+      "title": "JoinUsInfo",
+      "description": "Join Us section content",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "buttonText": { "type": "string" }
+      },
+      "required": ["title", "description"]
+    }
+  },
+  "firestore": {
+    "/sliders": { "schema": "Slider", "description": "Hero sliders" },
+    "/programs": { "schema": "Program", "description": "Trust programs" },
+    "/gallery": { "schema": "GalleryItem", "description": "Gallery items" },
+    "/meetings": { "schema": "Meeting", "description": "Meeting records" },
+    "/posts": { "schema": "Post", "description": "Blog articles" },
+    "/contacts": { "schema": "Contact", "description": "Contact messages" },
+    "/members": { "schema": "Member", "description": "Trust members" },
+    "/notices": { "schema": "Notice", "description": "Marquee notices" },
+    "/certificates": { "schema": "Certificate", "description": "Important certificates" },
+    "/quickLinks": { "schema": "QuickLink", "description": "Quick links" },
+    "/siteContent/settings": { "schema": "SiteSettings", "description": "Site-wide settings" },
+    "/siteContent/donation": { "schema": "DonationInfo", "description": "Donation information" },
+    "/siteContent/joinUs": { "schema": "JoinUsInfo", "description": "Join Us section content" }
+  }
+}

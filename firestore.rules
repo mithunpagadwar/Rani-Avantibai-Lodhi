@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Post Rules
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /posts {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.uid == "9rduzsOZYYgQd9kcI8ZdwJ7p6ls1" ||
+         request.auth.token.email == "mithunpagadwar745@gmail.com");
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Test Connection Rule
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // User Rules
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    // Slider Rules
+    match /sliders/{sliderId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Program Rules
+    match /programs/{programId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Gallery Rules
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Meeting Rules
+    match /meetings/{meetingId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Contact Rules
+    match /contacts/{contactId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Member Rules
+    match /members/{memberId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Certificate Rules
+    match /certificates/{certId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Quick Link Rules
+    match /quickLinks/{linkId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Notice Rules
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Site Content Rules (About page, etc.)
+    match /siteContent/about {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /siteContent/{contentId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+  }
+}

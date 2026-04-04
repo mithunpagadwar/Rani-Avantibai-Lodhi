@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --color-saffron: #FF9933;
+  --color-white: #FFFFFF;
+  --color-green: #138808;
+  --color-navy: #000080;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply text-gray-900 bg-white antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  .btn-primary {
+    @apply bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-green-700 hover:bg-green-800 text-white px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg;
+  }
+}
+
+/* Custom Prose Styles for react-markdown */
+.prose-orange {
+  --tw-prose-links: theme('colors.orange.600');
+  --tw-prose-bullets: theme('colors.orange.600');
+  --tw-prose-counters: theme('colors.orange.600');
+  --tw-prose-headings: theme('colors.gray.900');
+}
+
+.prose {
+  @apply max-w-none;
+}
+
+.prose p {
+  @apply text-gray-700 leading-relaxed mb-6;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  @apply text-gray-900 font-bold mt-12 mb-6;
+}
+
+.prose ul {
+  @apply list-disc list-inside mb-6 space-y-2;
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
