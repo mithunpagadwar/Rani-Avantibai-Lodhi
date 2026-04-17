@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase';
-import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+import { 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  onAuthStateChanged, 
+  signOut,
+  signInWithEmailAndPassword 
+} from 'firebase/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, 
@@ -51,6 +57,10 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [stats, setStats] = useState({
     members: 0,
     sliders: 0,
@@ -102,11 +112,24 @@ export default function Admin() {
   };
 
   const handleLogin = async () => {
+    setError(null);
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login error:', error);
+      setError(error.message || 'Error logging in with Google');
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      console.error('Email login error:', error);
+      setError(error.message || 'Error logging in with Email/Password');
     }
   };
 
@@ -128,17 +151,74 @@ export default function Admin() {
             <Settings className="text-orange-600" size={48} />
           </div>
           <h1 className="text-3xl font-black text-gray-900 mb-3 tracking-tight">Admin Portal</h1>
-          <p className="text-gray-500 mb-10 font-medium">Please sign in with the authorized administrator account to manage the trust website.</p>
-          <button 
-            onClick={handleLogin} 
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-orange-100 flex items-center justify-center gap-3 active:scale-95"
-          >
-            <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-            Sign in with Google
-          </button>
+          <p className="text-gray-500 mb-8 font-medium">Please sign in with the authorized administrator account.</p>
+          
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 text-red-600 text-xs font-bold rounded-xl border border-red-100">
+              {error}
+            </div>
+          )}
+
+          {!showEmailLogin ? (
+            <div className="space-y-4">
+              <button 
+                onClick={handleLogin} 
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-orange-100 flex items-center justify-center gap-3 active:scale-95"
+              >
+                <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
+                Sign in with Google
+              </button>
+              
+              <button 
+                onClick={() => setShowEmailLogin(true)}
+                className="w-full text-gray-400 font-bold text-sm hover:text-orange-600 transition-colors py-2"
+              >
+                Or use Email & Password
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleEmailLogin} className="space-y-4 text-left">
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Email Address</label>
+                <input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl font-bold text-sm focus:ring-2 focus:ring-orange-600 outline-none transition-all"
+                  placeholder="admin@example.com"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Password</label>
+                <input 
+                  type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-100 p-4 rounded-2xl font-bold text-sm focus:ring-2 focus:ring-orange-600 outline-none transition-all"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <button 
+                type="submit"
+                className="w-full bg-gray-900 hover:bg-black text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-gray-200 active:scale-95"
+              >
+                Sign In
+              </button>
+              <button 
+                type="button"
+                onClick={() => setShowEmailLogin(false)}
+                className="w-full text-gray-400 font-bold text-sm hover:text-gray-600 transition-colors py-2 text-center"
+              >
+                Back to Google Sign In
+              </button>
+            </form>
+          )}
+
           <button 
             onClick={() => window.location.href = '/'} 
-            className="mt-6 text-gray-400 font-bold text-sm hover:text-gray-600 transition-colors"
+            className="mt-6 text-gray-300 font-bold text-[10px] uppercase tracking-widest hover:text-gray-600 transition-colors"
           >
             Back to Website
           </button>

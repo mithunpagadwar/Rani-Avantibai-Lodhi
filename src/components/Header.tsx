@@ -35,17 +35,23 @@ export default function Header() {
         <Link to="/" className="flex items-center gap-4 hover:opacity-90 transition-opacity">
           <div className="flex items-center gap-2">
             <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/800px-Emblem_of_India.svg.png" 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/512px-Emblem_of_India.svg.png" 
               alt="Emblem" 
-              className="h-10 md:h-12 w-auto brightness-0 invert"
+              className="h-10 md:h-12 w-auto brightness-200 contrast-200"
               referrerPolicy="no-referrer"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://www.india.gov.in/sites/upload_files/npi/files/logo_0.png';
+              }}
             />
             <div className="h-10 md:h-12 w-px bg-white/20 mx-1 md:mx-2" />
             <img 
               src={logoUrl} 
               alt="Trust Logo" 
-              className="h-10 md:h-12 w-10 md:w-12 rounded-full border border-white/20 object-contain bg-white/5"
+              className="h-10 md:h-12 w-10 md:w-12 rounded-full border border-white/20 object-contain bg-white"
               referrerPolicy="no-referrer"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=Trust&background=EA580C&color=fff';
+              }}
             />
           </div>
           <div className="flex flex-col">

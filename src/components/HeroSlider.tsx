@@ -18,23 +18,30 @@ export default function HeroSlider() {
       if (data.length > 0) {
         setSliders(data);
       } else {
-        // Fallback default sliders if none in DB
-        setSliders([
-          {
-            imageUrl: 'https://picsum.photos/seed/trust1/1920/1080',
-            title: 'Welcome to Rani Avantibai Lodhi Trust',
-            description: 'Dedicated to the memory of Amar Shahid Veerangana Rani Avantibai Lodhi.',
-            order: 0
-          },
-          {
-            imageUrl: 'https://picsum.photos/seed/trust2/1920/1080',
-            title: 'Empowering the Community',
-            description: 'Join us in our mission to bring positive change and social welfare.',
-            order: 1
-          }
-        ]);
+        useFallback();
       }
+    }, (error) => {
+      console.error('Error fetching sliders:', error);
+      useFallback();
     });
+
+    function useFallback() {
+      setSliders([
+        {
+          imageUrl: 'https://images.unsplash.com/photo-1621508654686-809f23efdaba?auto=format&fit=crop&q=80&w=1920&h=1080',
+          title: 'Welcome to Rani Avantibai Lodhi Trust',
+          description: 'Dedicated to the memory of Amar Shahid Veerangana Rani Avantibai Lodhi.',
+          order: 0
+        },
+        {
+          imageUrl: 'https://images.unsplash.com/photo-1541976590-713ea5488c57?auto=format&fit=crop&q=80&w=1920&h=1080',
+          title: 'Empowering the Community',
+          description: 'Join us in our mission to bring positive change and social welfare.',
+          order: 1
+        }
+      ]);
+    }
+
     return () => unsubscribe();
   }, []);
 
