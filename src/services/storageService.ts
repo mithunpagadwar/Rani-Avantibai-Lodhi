@@ -17,15 +17,18 @@ export async function uploadFile(
     // Sanitize filename and add timestamp
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
     const storageRef = ref(storage, `${path}/${Date.now()}_${sanitizedName}`);
-    console.log(`Starting upload to path: ${path}/${sanitizedName}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    
+    // Using resumable upload which is better for large files (YouTube-style)
+    const uploadTask = uploadBytesResumable(storageRef, file, {
+      cacheControl: 'public,max-age=31536000',
+    });
 
     uploadTask.on(
       'state_changed',
       {
         next: (snapshot) => {
+          // Calculate precise progress
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload progress for ${file.name}: ${Math.round(progress)}%`);
           if (onProgress) onProgress(progress);
         },
         error: (error) => {
