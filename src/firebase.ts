@@ -19,8 +19,15 @@ if (!firebaseConfig.projectId) {
   console.error('Firebase configuration is incomplete. Please check environment variables or firebase-applet-config.json');
 }
 
-// Debug log for production (without exposing the full key)
-console.log('Firebase API Key status:', firebaseConfig.apiKey ? 'Found' : 'Missing');
+// Debug log for production (shows only first and last 4 chars for verification)
+if (firebaseConfig.apiKey) {
+  const start = firebaseConfig.apiKey.substring(0, 4);
+  const end = firebaseConfig.apiKey.substring(firebaseConfig.apiKey.length - 4);
+  console.log(`Firebase API Key status: Found (${start}...${end})`);
+  console.log(`Firestore Database ID: ${firebaseConfig.firestoreDatabaseId}`);
+} else {
+  console.log('Firebase API Key status: Missing');
+}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

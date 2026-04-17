@@ -44,7 +44,7 @@ import DonationManager from '../components/DonationManager';
 import CertificateManager from '../components/CertificateManager';
 import QuickLinkManager from '../components/QuickLinkManager';
 
-const ADMIN_EMAIL = 'mithunpagadwar745@gmail.com';
+const ADMIN_EMAIL = 'amarshahidraniavantibailodhism@gmail.com';
 
 export default function Admin() {
   const [user, setUser] = useState<any>(null);

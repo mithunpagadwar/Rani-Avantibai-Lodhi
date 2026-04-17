@@ -27,7 +27,8 @@ service cloud.firestore {
     function isAdmin() {
       return isAuthenticated() && 
         (request.auth.uid == "9rduzsOZYYgQd9kcI8ZdwJ7p6ls1" ||
-         request.auth.token.email == "mithunpagadwar745@gmail.com");
+         request.auth.token.email == "mithunpagadwar745@gmail.com" ||
+         request.auth.token.email == "amarshahidraniavantibailodhism@gmail.com");
     }
 
     // ===============================================================
