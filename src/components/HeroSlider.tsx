@@ -14,7 +14,10 @@ export default function HeroSlider() {
   useEffect(() => {
     const q = query(collection(db, 'sliders'), orderBy('order', 'asc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Slider));
+      const data = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() } as Slider))
+        .filter(s => s.imageUrl && s.imageUrl.trim() !== '');
+      
       if (data.length > 0) {
         setSliders(data);
       } else {
@@ -29,14 +32,14 @@ export default function HeroSlider() {
       setSliders([
         {
           imageUrl: 'https://images.unsplash.com/photo-1621508654686-809f23efdaba?auto=format&fit=crop&q=80&w=1920&h=1080',
-          title: 'Welcome to Rani Avantibai Lodhi Trust',
-          description: 'Dedicated to the memory of Amar Shahid Veerangana Rani Avantibai Lodhi.',
+          title: 'Slide 1',
+          description: '',
           order: 0
         },
         {
           imageUrl: 'https://images.unsplash.com/photo-1541976590-713ea5488c57?auto=format&fit=crop&q=80&w=1920&h=1080',
-          title: 'Empowering the Community',
-          description: 'Join us in our mission to bring positive change and social welfare.',
+          title: 'Slide 2',
+          description: '',
           order: 1
         }
       ]);
@@ -56,59 +59,28 @@ export default function HeroSlider() {
   const next = () => setCurrentIndex((prev) => (prev + 1) % sliders.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + sliders.length) % sliders.length);
 
-  if (sliders.length === 0) return <div className="h-screen bg-gray-100 animate-pulse" />;
+  if (sliders.length === 0) return <div className="h-full w-full bg-gray-100 animate-pulse" />;
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden bg-gray-200">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
           className="absolute inset-0"
         >
-          <div className="absolute inset-0">
-            <img 
-              src={sliders[currentIndex].imageUrl} 
-              alt={sliders[currentIndex].title}
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-black/50" />
-          </div>
-          
-          <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center text-center text-white">
-            <motion.h1
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 max-w-4xl"
-            >
-              {sliders[currentIndex].title}
-            </motion.h1>
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-lg md:text-xl mb-8 max-w-2xl text-gray-200"
-            >
-              {sliders[currentIndex].description}
-            </motion.p>
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <Link
-                to="/about"
-                className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
-              >
-                Read More
-              </Link>
-            </motion.div>
-          </div>
+          <img 
+            src={sliders[currentIndex].imageUrl} 
+            alt="Slider Display"
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1621508654686-809f23efdaba?auto=format&fit=crop&q=80&w=1920&h=1080';
+            }}
+          />
         </motion.div>
       </AnimatePresence>
 
