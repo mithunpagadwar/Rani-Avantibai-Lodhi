@@ -19,7 +19,8 @@ service cloud.firestore {
       return isSignedIn() && 
         (request.auth.token.email == "mithunpagadwar745@gmail.com" || 
          request.auth.token.email == "mithunpagadwar8@gmail.com" || 
-         request.auth.token.email == "amarshahidraniavantibailodhism@gmail.com");
+         request.auth.token.email == "amarshahidraniavantibailodhism@gmail.com" ||
+         request.auth.uid == "nyy3bsWqS6cxST094tjEByKDCa82");
     }
 
     function isValidId(id) {

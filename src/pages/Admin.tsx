@@ -86,6 +86,9 @@ export default function Admin() {
         } else {
           console.warn('Unauthorized email:', u.email);
           setUser(null);
+          if (u.email) {
+            setError(`Email "${u.email}" is not authorized. Please contact the main administrator.`);
+          }
         }
       } else {
         setUser(null);

@@ -47,6 +47,8 @@
     "/posts/{postId}": { "schema": "Post", "description": "Blog posts collection" },
     "/sliders/{sliderId}": { "schema": "Slider", "description": "Hero sliders" },
     "/siteContent/settings": { "schema": "Setting", "description": "Site-wide settings" },
-    "/quickLinks/{linkId}": { "schema": "QuickLink", "description": "Navigation links" }
+    "/quickLinks/{linkId}": { "schema": "QuickLink", "description": "Navigation links" },
+    "/programs/{programId}": { "schema": "object", "description": "Trust programs and videos" },
+    "/members/{memberId}": { "schema": "object", "description": "Trust committee members" }
   }
 }
