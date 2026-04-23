@@ -109,11 +109,21 @@ export function subscribeToCollection<T>(
     console.log(`Firestore Subscription [${path}]: Received ${data.length} items`);
     callback(data);
   }, (error) => {
-    console.error(`Error subscribing to ${path}:`, error);
+    console.error(`Firestore Subscription Error [${path}]:`, error);
     if (onError) {
       onError(error);
     } else {
-      handleFirestoreError(error, OperationType.GET, path);
+      // Don't throw here to avoid crashing the effect, just log carefully
+      const errInfo = {
+        error: error.message,
+        operationType: OperationType.GET,
+        path,
+        authInfo: {
+          userId: auth.currentUser?.uid,
+          email: auth.currentUser?.email
+        }
+      };
+      console.error('Subscription blocked by rules or other error:', JSON.stringify(errInfo));
     }
   });
 }
