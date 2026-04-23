@@ -29,8 +29,16 @@ export default function Home() {
   const [joinUs, setJoinUs] = useState<JoinUsInfo | null>(null);
 
   useEffect(() => {
-    const unsubMembers = subscribeToCollection<Member>('members', setMembers, orderBy('order', 'asc'));
-    const unsubPosts = subscribeToCollection<Post>('posts', setLatestPosts, orderBy('date', 'desc'), limit(3));
+    console.log('Home: Initializing data subscriptions...');
+    const unsubMembers = subscribeToCollection<Member>('members', (data) => {
+      console.log('Home: Received members:', data.length, data);
+      setMembers(data);
+    });
+    
+    const unsubPosts = subscribeToCollection<Post>('posts', (data) => {
+      console.log('Home: Received posts:', data.length);
+      setLatestPosts(data);
+    }, orderBy('date', 'desc'), limit(3));
     const unsubNotices = subscribeToCollection<Notice>('notices', setNotices, orderBy('date', 'desc'));
     const unsubCerts = subscribeToCollection<Certificate>('certificates', setCertificates, orderBy('order', 'asc'));
     const unsubLinks = subscribeToCollection<QuickLink>('quickLinks', setQuickLinks, orderBy('order', 'asc'));

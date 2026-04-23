@@ -106,6 +106,7 @@ export function subscribeToCollection<T>(
   const q = query(collection(db, path), ...constraints);
   return onSnapshot(q, (snapshot) => {
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as T));
+    console.log(`Firestore Subscription [${path}]: Received ${data.length} items`);
     callback(data);
   }, (error) => {
     console.error(`Error subscribing to ${path}:`, error);

@@ -23,7 +23,10 @@ export default function About() {
     };
     fetchData();
 
-    const unsubscribe = subscribeToCollection<Member>('members', setMembers, orderBy('order', 'asc'));
+    const unsubscribe = subscribeToCollection<Member>('members', (data) => {
+      console.log('About: Received members:', data.length);
+      setMembers(data);
+    });
     return () => unsubscribe();
   }, []);
 
