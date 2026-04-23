@@ -485,18 +485,24 @@ export default function Admin() {
           </div>
           
           <div className="flex items-center gap-5">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-black text-gray-900 leading-none mb-1">{user.displayName || 'Admin'}</p>
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">{user.email}</p>
-              <p className="text-[8px] text-gray-300 font-bold uppercase tracking-tighter">UID: {user.uid}</p>
-            </div>
-            <div className="relative group">
+            <div className="relative group flex items-center gap-3">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-black text-gray-900 leading-none mb-1">{user.displayName || 'Admin'}</p>
+                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">{user.email}</p>
+              </div>
               <img 
                 src={user.photoURL || `https://ui-avatars.com/api/?name=Admin&background=EA580C&color=fff`} 
                 className="w-12 h-12 rounded-2xl border-2 border-white shadow-md group-hover:scale-105 transition-transform cursor-pointer" 
                 alt="Admin" 
               />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+              <button
+                onClick={handleLogout}
+                className="ml-2 p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                title="Logout"
+              >
+                <LogOut size={18} />
+              </button>
+              <div className="absolute -bottom-1 right-12 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
             </div>
           </div>
         </header>
