@@ -1,113 +1,96 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Post Rules
-    match /posts/{postId} {
-      allow read: if true;
-      allow write: if isAdmin();
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
     }
 
-    match /posts {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // ===============================================================
-    // Helper Functions
-    // ===============================================================
-    
-    function isAuthenticated() {
+    // 0.1 Standard Helpers
+    function isSignedIn() {
       return request.auth != null;
     }
-    
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
     }
-    
+
     function isAdmin() {
-      return isAuthenticated() && 
-        (request.auth.uid == "9rduzsOZYYgQd9kcI8ZdwJ7p6ls1" ||
-         request.auth.token.email == "mithunpagadwar745@gmail.com" ||
-         request.auth.token.email == "amarshahidraniavantibailodhism@gmail.com");
+      return isSignedIn() && 
+        (request.auth.token.email == "mithunpagadwar745@gmail.com" || 
+         request.auth.token.email == "amarshahidraniavantibailodhism@gmail.com" ||
+         request.auth.uid == "9rduzsOZYYgQd9kcI8ZdwJ7p6ls1");
     }
 
-    // ===============================================================
-    // Rules
-    // ===============================================================
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
 
-    // Test Connection Rule
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 1. Connection Test
     match /test/connection {
-      allow read: if true;
+      allow get: if true;
     }
 
-    // User Rules
+    // 2. Blog Posts
+    match /posts/{postId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidPost(incoming());
+      allow update: if isAdmin() && isValidPost(incoming());
+      allow delete: if isAdmin();
+    }
+
+    function isValidPost(data) {
+      return data.title is string && data.title.size() > 0 && data.title.size() <= 500 &&
+             data.content is string && data.content.size() <= 50000;
+    }
+
+    // 3. User Profiles
     match /users/{userId} {
-      allow read, write: if isOwner(userId) || isAdmin();
+      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update: if isSignedIn() && request.auth.uid == userId && (
+        incoming().diff(existing() == null ? {} : existing()).affectedKeys().hasOnly(['name', 'email', 'updatedAt', 'photoURL'])
+      );
     }
 
-    // Slider Rules
+    // 4. Hero Sliders
     match /sliders/{sliderId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow get, list: if true;
+      allow write: if isAdmin();
     }
 
-    // Program Rules
-    match /programs/{programId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Gallery Rules
-    match /gallery/{itemId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Meeting Rules
-    match /meetings/{meetingId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Contact Rules
-    match /contacts/{contactId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
-    }
-
-    // Member Rules
-    match /members/{memberId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Certificate Rules
-    match /certificates/{certId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Quick Link Rules
-    match /quickLinks/{linkId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Notice Rules
-    match /notices/{noticeId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    // Site Content Rules (About page, etc.)
-    match /siteContent/about {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
+    // 5. Site Content (settings, about, etc.)
     match /siteContent/{contentId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow get: if true;
+      allow list: if true;
+      allow write: if isAdmin();
+    }
+
+    // 6. Quick Links
+    match /quickLinks/{linkId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+    }
+
+    // 7. Generic Protected Collections (members, gallery, meetings, contacts, notices, certificates, programs)
+    match /members/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /gallery/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /meetings/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /notices/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /certificates/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /programs/{id} { allow read: if true; allow write: if isAdmin(); }
+    
+    // Contacts: Public can create (send a message), Admin can manage
+    match /contacts/{id} {
+      allow create: if true;
+      allow read, delete: if isAdmin();
     }
   }
 }

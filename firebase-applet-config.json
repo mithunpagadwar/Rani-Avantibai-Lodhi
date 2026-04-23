@@ -1,10 +1,10 @@
 {
-  "projectId": "virangana-rani-avantibai",
-  "appId": "1:135323296095:web:5d4eb897812d6d4dc456ea",
-  "apiKey": "AIzaSyBwg5_00oZNbqGkMZgf0wIIhUfNua26j0o",
-  "authDomain": "virangana-rani-avantibai.firebaseapp.com",
+  "projectId": "grampanchayatchikhali-8a314",
+  "appId": "1:627147233902:web:473219f2d4c2630da3a47f",
+  "apiKey": "AIzaSyBkiKQBrYNz9YVR56waGOtDbXtQSl8Jl7I",
+  "authDomain": "grampanchayatchikhali-8a314.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
-  "storageBucket": "virangana-rani-avantibai.firebasestorage.com",
-  "messagingSenderId": "135323296095",
-  "measurementId": "G-4TDP0EEZ5B"
+  "storageBucket": "grampanchayatchikhali-8a314.firebasestorage.app",
+  "messagingSenderId": "627147233902",
+  "measurementId": "G-TWDRPV484T"
 }

@@ -36,8 +36,13 @@ export default function SliderManager() {
       setNewItem(prev => ({ ...prev, imageUrl: url }));
       setUploadProgress(null);
     } catch (error: any) {
-      console.error('Upload failed:', error);
-      alert(`Failed to upload image: ${error.message || 'Unknown error'}`);
+      console.error('Upload failed with details:', error);
+      // Detailed error for debugging
+      const errorMsg = error.code === 'storage/unauthorized' 
+        ? 'Permission Denied: Please check your Firebase Storage rules (Step 2 in my previous message).'
+        : error.message || 'Check your internet or CORS settings (Step 1).';
+      alert(`Upload Failed: ${errorMsg}`);
+      setUploadProgress(null);
     } finally {
       setIsUploading(false);
     }
@@ -176,14 +181,40 @@ export default function SliderManager() {
                   )}
                 >
                   {isUploading ? (
-                    <div className="flex flex-col items-center gap-4">
-                      <div className="relative">
-                        <Loader2 className="animate-spin text-orange-600" size={48} />
+                    <div className="flex flex-col items-center gap-6 w-full px-10">
+                      <div className="relative w-24 h-24">
+                        <svg className="w-full h-full transform -rotate-90">
+                          <circle
+                            cx="48"
+                            cy="48"
+                            r="44"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="8"
+                            className="text-gray-100"
+                          />
+                          <motion.circle
+                            cx="48"
+                            cy="48"
+                            r="44"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="8"
+                            strokeDasharray="276"
+                            initial={{ strokeDashoffset: 276 }}
+                            animate={{ strokeDashoffset: 276 - (276 * (uploadProgress || 0)) / 100 }}
+                            className="text-orange-600"
+                            strokeLinecap="round"
+                          />
+                        </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-2 h-2 bg-orange-600 rounded-full"></div>
+                          <span className="text-sm font-black text-orange-600">{Math.round(uploadProgress || 0)}%</span>
                         </div>
                       </div>
-                      <span className="text-sm font-black text-orange-600 uppercase tracking-widest">Uploading...</span>
+                      <div className="text-center">
+                        <p className="text-sm font-black text-gray-900 uppercase tracking-widest">Streaming to Server...</p>
+                        <p className="text-[10px] text-gray-400 font-bold mt-1">Slicing file into chunks for speed</p>
+                      </div>
                     </div>
                   ) : newItem.imageUrl ? (
                     <>

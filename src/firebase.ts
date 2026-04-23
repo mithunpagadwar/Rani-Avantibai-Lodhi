@@ -25,6 +25,7 @@ if (firebaseConfig.apiKey) {
   const end = firebaseConfig.apiKey.substring(firebaseConfig.apiKey.length - 4);
   console.log(`Firebase API Key status: Found (${start}...${end})`);
   console.log(`Firestore Database ID: ${firebaseConfig.firestoreDatabaseId}`);
+  console.log(`Current Domain: ${window.location.hostname}`);
 } else {
   console.log('Firebase API Key status: Missing');
 }

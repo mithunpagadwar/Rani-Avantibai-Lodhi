@@ -50,7 +50,10 @@ import DonationManager from '../components/DonationManager';
 import CertificateManager from '../components/CertificateManager';
 import QuickLinkManager from '../components/QuickLinkManager';
 
-const ADMIN_EMAIL = 'amarshahidraniavantibailodhism@gmail.com';
+const ADMIN_EMAILS = [
+  'amarshahidraniavantibailodhism@gmail.com',
+  'mithunpagadwar745@gmail.com'
+];
 
 export default function Admin() {
   const [user, setUser] = useState<any>(null);
@@ -76,7 +79,7 @@ export default function Admin() {
           uid: u.uid,
           emailVerified: u.emailVerified
         });
-        if (u.email === ADMIN_EMAIL) {
+        if (u.email && ADMIN_EMAILS.includes(u.email)) {
           setUser(u);
           fetchStats();
         } else {
