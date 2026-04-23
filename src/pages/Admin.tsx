@@ -52,7 +52,8 @@ import QuickLinkManager from '../components/QuickLinkManager';
 
 const ADMIN_EMAILS = [
   'amarshahidraniavantibailodhism@gmail.com',
-  'mithunpagadwar745@gmail.com'
+  'mithunpagadwar745@gmail.com',
+  'mithunpagadwar8@gmail.com'
 ];
 
 export default function Admin() {
